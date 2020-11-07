@@ -1,4 +1,16 @@
 const createError = require('http-errors');
+const axios = require('axios');
+
+exports.logInToken = async () => {
+  const getToken = await axios.post('http://localhost:3000/login');
+  return getToken;
+}
+
+exports.getOwnPolicies = async (email) => {
+  const policies = await axios.post('http://localhost:3000/login');
+  const ownPolicies = policies.filter(item =>  item.email === email);
+  return ownPolicies;
+}
 
 exports.isLoggedIn = () => (req, res, next) => {
   if (req.session.currentUser) {
