@@ -83,4 +83,30 @@ router.get('/:id', (req, res, next) => {
   getClients();
 });
 
+/* Retrieve individual client. */
+router.get('/:id/policies', (req, res, next) => {
+  const { id } = req.params;
+  const getClients = async () => {
+    logInToken()
+      .then((response) => {
+        const token = response.data.token;
+        axios(getRequest(token))
+        .then((response) =>  {
+          const client = response.data.filter(item => item.id == id);
+          if (client[0].id) {
+            getOwnPolicies(client[0].id)
+              .then(data => res.status(200).json(data))
+              .catch(error => console.log(error))
+          }
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+  }
+  getClients();
+});
 module.exports = router;

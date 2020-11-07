@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var axios = require('axios');
 const createError = require('http-errors');
-const { logInToken } = require('../helpers/middlewares');
+const { logInToken, getOwnPolicies } = require('../helpers/middlewares');
 
 const getRequest = (tok) => {
     return {
@@ -18,7 +18,7 @@ const getRequest = (tok) => {
   router.get('/', (req, res, next) => {
     
     let limit = 10;
-    let page = 1;
+    let page = 0;
     if (req.query.limit) {
         limit = parseInt(req.query.limit);
     }

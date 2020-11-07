@@ -6,9 +6,9 @@ exports.logInToken = async () => {
   return getToken;
 }
 
-exports.getOwnPolicies = async (email) => {
-  const policies = await axios.post('http://localhost:3000/login');
-  const ownPolicies = policies.filter(item =>  item.email === email);
+exports.getOwnPolicies = async (id) => {
+  const response = await axios.get('http://localhost:3000/policies?limit=100');
+  const ownPolicies = response.data.filter(item =>  item.clientId == id);
   return ownPolicies;
 }
 
