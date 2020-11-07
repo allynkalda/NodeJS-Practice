@@ -1,11 +1,12 @@
 var express = require('express');
 var router = express.Router();
 var axios = require('axios');
+const createError = require('http-errors');
 const { isLoggedIn, isNotLoggedIn, validationLoggin } = require('../helpers/middlewares');
+const { getToken } = require('../data/data');
 
 /* Retrieve the auth token. */
 router.post('/', (req, res, next) => {
-  console.log('session', req.session)
   const { username, password } = req.body;
 
   const request = {
@@ -19,19 +20,15 @@ router.post('/', (req, res, next) => {
       client_secret: password
     }
 };
-
-  const login = async () => {
-    axios(request)
+  axios(request)
     .then((response) =>  {
+      req.session.currentUser = response.data.token;
       res.status(200).json(response.data);
-      req.session.token = response.data.token;
     })
     .catch((error) => {
       console.log(error);
+      next(createError(400))
     });
-  }
-
-  login();
 });
 
 module.exports = router;
